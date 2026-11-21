@@ -9,8 +9,8 @@
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
     const vertexShader = `
       varying vec2 vUv;
@@ -152,15 +152,21 @@
       if (!canvas) return;
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
+      if (width === 0 || height === 0) return;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(width, height, false);
       material.uniforms.uResolution.value.set(width, height);
       renderFrame(lastTime);
     };
     window.addEventListener('resize', onResize);
+    const resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(canvas);
+    onResize();
 
     return () => {
       stopAnimation();
       window.removeEventListener('resize', onResize);
+      resizeObserver.disconnect();
       motionQuery.removeEventListener('change', applyMotionPreference);
       renderer.dispose();
       geometry.dispose();
@@ -178,6 +184,8 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     z-index: -1;
     pointer-events: none;
     display: block;

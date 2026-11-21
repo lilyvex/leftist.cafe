@@ -5,7 +5,7 @@
 <div class="flex items-center justify-center min-h-screen">
     <TerminalWindow title="User: Lily">
         <h2>Lily's Website</h2>
-        <p>
+        <p class="text-justify">
             Hi, I'm Lily (she/her). I'm a computer scientist, and I contribute to open-source projects in my freetime. 
             You can find my work on <a href="https://github.com/lilyvex">GitHub</a> and <a href="https://codeberg.org/lilyvex">Codeberg</a>. 
             I do a little bit of everything. My primary experience is in systems languages such as C, C++, and Rust.
@@ -14,7 +14,6 @@
         <h3>Contact</h3>
         <ul class="pb-3">
             <li><a href="mailto:luxzi@pm.me">E-mail</a></li>
-            <li><a href="https://discord.com/users/297490782397399040">Discord</a></li>
         </ul>
         <hr/>
         <div class="flex items-center justify-center pt-4 pb-2">
