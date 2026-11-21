@@ -20,7 +20,7 @@
   </div>
 
   <div
-    class="terminal-body flex-1 overflow-auto bg-black p-2.5 text-red-600 m-0 border-none text-2xl"
+    class="terminal-body flex-1 overflow-auto bg-black p-2.5 text-red-600 m-0 border-none text-base"
   >
     {@render children?.()}
   </div>
@@ -28,7 +28,9 @@
 
 <style>
   .terminal-window {
-    width: 1000px;
+    width: min(500px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    box-sizing: border-box;
     height: fit-content;
   }
 
@@ -39,6 +41,10 @@
   .title-bar {
     background: linear-gradient(90deg, #4a0000, #b01414);
     color: #ffffff;
+  }
+
+  .title-bar-text {
+    font-size: 0.6rem;
   }
 
   .terminal-body :global(p) {
@@ -65,12 +71,14 @@
 
   .terminal-body :global(h2) {
     display: block;
+    font-size: 1.25rem;
     padding-left: 5px;
     margin: 0;
   }
 
   .terminal-body :global(h3) {
     display: block;
+    font-size: 1.125rem;
     padding-left: 5px;
     margin: 0;
     margin-top: 15px;

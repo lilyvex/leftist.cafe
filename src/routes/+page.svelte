@@ -1,8 +1,8 @@
 <script>
-  import TerminalWindow from '$lib/components/TerminalWindow.svelte';
+  import TerminalWindow from '../lib/components/TerminalWindow.svelte';
 </script>
 
-<div class="flex items-center justify-center min-h-screen">
+<div class="flex min-h-[100dvh] items-center justify-center px-4 py-4">
     <TerminalWindow title="User: Lily">
         <h2>Lily's Website</h2>
         <p class="text-justify">
