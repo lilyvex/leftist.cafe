@@ -1,14 +1,14 @@
 <script lang="ts">
-	import QuakeSkyBackground from '$lib/components/QuakeSkyBackground.svelte';
+	import SkyBackground from '../lib/components/SkyBackground.svelte';
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import '98.css';
+	import favicon from '../lib/assets/favicon.webp';
+	import '7.css';
 
 	let { children } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<QuakeSkyBackground />
+<SkyBackground />
 
 {@render children()}

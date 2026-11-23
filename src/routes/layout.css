@@ -1,2 +1,12 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+html {
+  min-height: 100%;
+  background: linear-gradient(to top, #c7e0f5 0%, #3d8cd1 100%) fixed;
+}
+
+body {
+  min-height: 100vh;
+  background: transparent;
+}

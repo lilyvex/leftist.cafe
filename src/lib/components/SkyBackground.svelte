@@ -56,39 +56,40 @@
       }
 
       void main() {
-        // Aspect-corrected UV so clouds stay square on any screen
+        // Aspect-corrected UV keeps the sky and clouds natural on any screen.
         float aspect = uResolution.x / uResolution.y;
+        float cloudAspect = max(aspect, 0.75);
         vec2 uv = vUv;
-        // Larger multiplier = smaller cloud features = more clouds on screen
-        vec2 p = vec2(uv.x * aspect, uv.y) * 4.5;
+        vec2 p = vec2(uv.x * cloudAspect, uv.y) * 2.35;
 
-        // Two scrolling layers
-        vec2 uv1 = p + vec2(uTime * 0.12, 0.0);
-        float cloud1 = fbm(uv1);
+        // Pale near the horizon, deeper blue overhead.
+        vec3 horizon = vec3(0.78, 0.88, 0.96);
+        vec3 zenith = vec3(0.24, 0.55, 0.82);
+        float height = smoothstep(0.05, 0.92, uv.y);
+        vec3 sky = mix(horizon, zenith, height);
 
-        vec2 uv2 = p * 1.6 + vec2(uTime * 0.28, 0.0);
-        uv2 = mat2(0.866, -0.5, 0.5, 0.866) * uv2;
-        float cloud2 = fbm(uv2);
+        // Two slow, soft cloud layers.
+        vec2 drift = vec2(uTime * 0.045 * cloudAspect, 0.0);
+        float cloudBase = fbm(p * 0.72 + drift);
+        float cloudDetail = fbm(p * 1.35 - drift * 1.4);
+        float density = cloudBase * 0.78 + cloudDetail * 0.22;
 
-        float clouds = cloud1 * 0.55 + cloud2 * 0.45;
+        // Add broad coverage while leaving denser, softer clouds near the horizon.
+        float horizonBias = mix(0.12, -0.08, uv.y);
+        float clouds = smoothstep(0.36 - horizonBias, 0.52 - horizonBias, density);
+        clouds *= 0.98 * smoothstep(0.02, 0.10, uv.y);
 
-        // Sharpen and push coverage up so the clouds read as dense/solid
-        clouds = smoothstep(0.28, 0.62, clouds);
-        clouds = pow(clouds, 0.55);
+        vec3 cloudTop = vec3(0.98, 0.99, 1.00);
+        vec3 cloudShade = vec3(0.74, 0.80, 0.86);
+        float lighting = smoothstep(0.35, 0.82, cloudDetail);
+        vec3 cloudColor = mix(cloudShade, cloudTop, lighting);
+        vec3 color = mix(sky, cloudColor, clouds);
 
-        // Red sky gradient
-        vec3 skyLow  = vec3(0.28, 0.02, 0.01); // deep blood red
-        vec3 skyHigh = vec3(0.85, 0.18, 0.06); // bright ember red
-
-        float horizon = smoothstep(0.0, 1.0, uv.y);
-        vec3 sky = mix(skyLow, skyHigh, horizon);
-
-        // Clouds are solid black, fully opaque — mask the sky through them
-        vec3 color = mix(sky, vec3(0.0), clouds);
-
-        // Faint vignette
-        float vignette = 1.0 - length(uv - 0.5) * 0.4;
-        color *= vignette;
+        // Broad, understated sunlight near the upper-right of the frame.
+        vec2 sunPos = vec2(aspect * 0.78, 0.76);
+        vec2 sunVec = vec2(uv.x * aspect, uv.y) - sunPos;
+        float sunGlow = exp(-dot(sunVec, sunVec) * 18.0);
+        color += vec3(1.0, 0.82, 0.52) * sunGlow * 0.12;
 
         gl_FragColor = vec4(color, 1.0);
       }
@@ -109,7 +110,7 @@
     const quad = new THREE.Mesh(geometry, material);
     scene.add(quad);
 
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let animationId = 0;
     let lastTime = 0;
 
@@ -120,7 +121,8 @@
 
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-      lastTime = clock.getElapsedTime();
+      timer.update();
+      lastTime = timer.getElapsed();
       renderFrame(lastTime);
     };
 
@@ -187,5 +189,22 @@
     z-index: -1;
     pointer-events: none;
     display: block;
+    animation: sky-fade-in 2s ease-out both;
+  }
+
+  @keyframes sky-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quake-sky-canvas {
+      animation: none;
+    }
   }
 </style>
