@@ -12,7 +12,7 @@
   <PrimaryWindow title="Lily's Website">
     <Navbar />
     <div class="mx-auto max-w-[90%] text-justify">
-      <Header size={3}>Hi, I'm Lily</Header>
+      <Header size={3}>Hi, I'm Lily (she/her)</Header>
       I have a lot of hobbies and interests.
       This website mainly covers my software, music, and political science works.
       The <b>Blog</b> and <b>Projects</b> sections of this site are currently under construction.
@@ -49,7 +49,8 @@
       <Header size={4}>Political Science</Header>
       I'm sure you can already tell from the domain of this website that I have an interest in political activism.
       I primarily study Marxism and Leninism, often called Marxism-Leninism.
-      Once the Blog section of this site is complete, I will post Marxist analyses of current events, historical events, and original works. 
+      Once the Blog section of this site is complete, I will post Marxist analyses of current events, historical events, and original works.
+      Trans rights are human rights.
     </div>
 
     <div class="max-w-[80%] mx-auto mt-2">
